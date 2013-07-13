@@ -16,8 +16,10 @@
 
 __author__ = 'alainv@google.com (Alain Vongsouvanh)'
 
+import datetime
 
 from google.appengine.ext import db
+from google.appengine.API import users
 
 from oauth2client.appengine import CredentialsProperty
 
@@ -29,3 +31,14 @@ class Credentials(db.Model):
   used by the Storage classes to store OAuth 2.0 credentials in the data store.
   """
   credentials = CredentialsProperty()
+
+class FoodItem(db.Model):
+	"""Datastore entity for storing food items."""
+	name = db.StringProperty(required=True)
+	calories = db.IntegerProperty(required=True)
+	imagelink = db.LinkProperty(required=True)
+
+class Activity(db.Model):
+	name = db.StringProperty(required=True)
+	burnrate = db.FloatProperty(required=True)
+	duration = db.IntegerProperty(required=True)
