@@ -127,13 +127,18 @@ class MainHandler(webapp2.RequestHandler):
 
   def present_food(self, f):
     """Add a food to glass"""
+    html = self.make_html(f)
+    logging.info("HTML is %s"%html)
     body = {
       'notification': {'level': 'DEFAULT'},
-      'text': "%s\ncalories: %s\nimage: %s"%(f.name, f.calories, f.imagelink)}
+      'html': html}
     
     # self.mirror_service is initialized in util.auth_required.
     self.mirror_service.timeline().insert(body=body).execute()
     return  'A food item has been sent to the timeline'
+
+  def make_html(self, f):
+    return '<div><p>Food: %s</p><p>Calories %s</p><p><img src="%s"/>'%(f.name, f.calories, f.imagelink)
 
   def _insert_item(self):
     """Insert a timeline item."""
