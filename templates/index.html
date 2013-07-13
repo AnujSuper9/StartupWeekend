@@ -106,11 +106,24 @@ limitations under the License.
         <input type="hidden" name="message"
                value="Add a food item with an image.">
         <input type="hidden" name="imageUrl"
-               value="/static/images/saturn-eclipse.jpg">
+               value="/static/images/pancakes.jpg">
         <input type="hidden" name="contentType" value="image/jpeg">
 
         <button class="btn" type="submit">Add food with an image 
           <img class="button-icon" src="/static/images/pancakes.jpg">
+        </button>
+      </form>
+
+      <form action="/" method="post">
+        <input type="hidden" name="operation" value="addFoodImage">
+        <input type="hidden" name="message"
+               value="Add a food item with an image.">
+        <input type="hidden" name="imageUrl"
+               value="/static/images/tacos.png">
+        <input type="hidden" name="contentType" value="image/jpeg">
+
+        <button class="btn" type="submit">Eat tacos 
+          <img class="button-icon" src="/static/images/tacos.png">
         </button>
       </form>
 
@@ -165,8 +178,7 @@ limitations under the License.
   </div>
 </div>
 
-<script
-    src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="/static/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
