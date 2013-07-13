@@ -250,7 +250,7 @@ def calc_calories(name):
                 'sandwhich': 200,
                 'spaghetti': 400,
                 'tacos': 450}
-  return calorieMap[name] or 1000
+  return calorieMap.get(name, 1000)
 
 def find_image(name):
   return "/static/images/%s.png"%name
