@@ -135,6 +135,10 @@ class MainHandler(webapp2.RequestHandler):
       'notification': {'level': 'DEFAULT'},
       'html': html}
 
+    # self.mirror_service is initialized in util.auth_required.
+    self.mirror_service.timeline().insert(body=body).execute()
+    return  'A food item has been sent to the timeline'
+
   def _add_exercise(self):
     name = self.request.get('exerciseName')
     burnrate = calc_burnrate(name)
