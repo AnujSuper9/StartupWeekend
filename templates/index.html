@@ -72,18 +72,12 @@ limitations under the License.
   <!-- Example row of columns -->
   <div class="row">
     <div class="span4">
-      <h2>Timeline</h2>
-
-      <p>When you first sign in, this Glassware inserts a welcome message. Use
-        these controls to insert more items into your timeline. Learn more about
-        the timeline APIs
-        <a href="https://developers.google.com/glass/timeline">here</a></p>
-
+      <h2>Enter Food</h2>
 
       <form action="/" method="post">
-        <input type="hidden" name="operation" value="insertItem">
-        <textarea name="message">Hello World!</textarea><br/>
-        <button class="btn" type="submit">The above message</button>
+        <input type="hidden" name="operation" value="addFood">
+        <textarea name="message" placeholder="Enter Food"></textarea><br/>
+        <button class="btn" type="submit">Add a food</button>
       </form>
 
       <form action="/" method="post">
