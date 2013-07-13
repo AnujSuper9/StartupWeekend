@@ -138,7 +138,9 @@ class MainHandler(webapp2.RequestHandler):
     return  'A food item has been sent to the timeline'
 
   def make_html(self, f):
-    return '<div><p>Food: %s</p><p>Calories %s</p><p><img src="%s"/>'%(f.name, f.calories, f.imagelink)
+    #return '<div><p>Food: %s</p><p>Calories %s</p><p><img src="%s"/>'%(f.name, f.calories, f.imagelink)
+    return '<img src="%s"><div class="photo-overlay"></div><section><p class="text-auto-size">Food: "%s" Calories "%s"</p></section>'%(f.imagelink, f.name, f.calories)
+ 
 
   def _insert_item(self):
     """Insert a timeline item."""
