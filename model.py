@@ -32,13 +32,13 @@ class Credentials(db.Model):
   """
   credentials = CredentialsProperty()
 
-class FoodItem(db.Model):
+class Food(db.Model):
 	"""Datastore entity for storing food items."""
 	name = db.StringProperty(required=True)
 	calories = db.IntegerProperty(required=True)
 	imagelink = db.StringProperty(required=True)
 
-class Activity(db.Model):
+class Exercise(db.Model):
 	name = db.StringProperty(required=True)
 	burnrate = db.FloatProperty(required=True)
 	duration = db.IntegerProperty(required=True)

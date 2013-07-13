@@ -33,7 +33,8 @@ from apiclient.http import BatchHttpRequest
 from oauth2client.appengine import StorageByKeyName
 
 from model import Credentials
-from model import FoodItem
+from model import Food
+from model import Exercise
 import util
 
 
@@ -107,7 +108,8 @@ class MainHandler(webapp2.RequestHandler):
     # Dict of operations to easily map keys to methods.
     operations = {
         'insertItem': self._insert_item,
-        'addFood': self._add_food
+        'addFood': self._add_food,
+        'addExercise': self._add_exercise
     }
     if operation in operations:
       message = operations[operation]()
@@ -119,9 +121,9 @@ class MainHandler(webapp2.RequestHandler):
 
   def _add_food(self):
     name = self.request.get('foodName')
-    calories = calc_calories(name)
+    calories = calc_foodcalories(name)
     image = find_image(name)
-    f = FoodItem(name = name, calories = calories, imagelink = image)
+    f = Food(name = name, calories = calories, imagelink = image)
     f.put
     self.present_food(f)
 
@@ -132,10 +134,30 @@ class MainHandler(webapp2.RequestHandler):
     body = {
       'notification': {'level': 'DEFAULT'},
       'html': html}
+
+  def _add_exercise(self):
+    name = self.request.get('exerciseName')
+    burnrate = calc_burnrate(name)
+    duration = int(self.request.get('exerciseDuration'))
+    e = Exercise(name = name, burnrate = burnrate, duration = duration)
+    e.put
+    self.present_exercise(e)
+
+  def present_exercise(self, e):
+    """Display exercise result to glass"""
+    calories = int(calc_exercisecalories(e.burnrate, e.duration))
+    name = get_foodname_from_calories(calories)
+    image = find_image(name)
+    f = Food(name = name, calories = calories, imagelink = image)
+    html = self.make_html(f)
+    logging.info("HTML is %s"%html)
+    body = {
+      'notification': {'level': 'DEFAULT'},
+      'html': html}
     
     # self.mirror_service is initialized in util.auth_required.
     self.mirror_service.timeline().insert(body=body).execute()
-    return  'A food item has been sent to the timeline'
+    return  'An exercise item has been sent to the timeline'
 
   def make_html(self, f):
     #return '<div><p>Food: %s</p><p>Calories %s</p><p><img src="%s"/>'%(f.name, f.calories, f.imagelink)
@@ -241,16 +263,63 @@ class MainHandler(webapp2.RequestHandler):
 MAIN_ROUTES = [
     ('/', MainHandler)
 ]
-def calc_calories(name):
+def calc_foodcalories(name):
   calorieMap = {'chickenlegs': 500,
-                'cookies': 150,
+                'cookies': 140,
                 'pancakes': 300,
                 'platter': 50,
                 'riceandveggies': 75,
                 'sandwhich': 200,
                 'spaghetti': 400,
-                'tacos': 450}
+                'tacos': 450
+                }
   return calorieMap.get(name, 1000)
+
+def calc_burnrate(name):
+  burnrateMap = {'walking': 1.0,
+                  'running': 4.0,
+                  'bicycling': 2.0,
+                  'rowing': 3.0,
+                  'climbing': 5.0,
+                  'swimming': 6.0
+                }
+  return burnrateMap.get(name, 1.0)
+
+def get_foodname_from_calories (calories):
+  foodname = 'platter'
+  if (calories >= 500):
+    foodname = 'chickenlegs'
+  elif (calories >= 450 and calories < 500):
+    foodname = 'tacos'
+  elif (calories >= 400 and calories < 450):
+    foodname = 'spaghetti'
+  elif (calories >= 350 and calories < 400):
+    foodname = 'pancakes'
+  elif (calories >= 300 and calories < 350):
+    foodname = 'pancakes'
+  elif (calories >= 250 and calories < 300):
+    foodname = 'sandwich'
+  elif (calories >= 200 and calories < 250):
+    foodname = 'sandwich'
+  elif (calories >= 150 and calories < 200):
+    foodname = 'cookies'
+  elif (calories >= 100 and calories < 150):
+    foodname = 'cookies'
+  elif (calories >= 75 and calories < 100):
+    foodname = 'riceandveggies'
+  elif (calories >= 50 and calories < 75):
+    foodname = 'platter'
+  elif (calories >= 25 and calories < 50):
+    foodname = 'platter'
+  elif (calories >= 0 and calories < 25):
+    foodname = 'platter'
+  else:
+    foodname = 'platter'
+  return foodname
+
+def calc_exercisecalories(burnrate, duration):
+  calories = burnrate * duration
+  return calories
 
 def find_image(name):
   return "/static/images/%s.png"%name
