@@ -19,7 +19,7 @@ __author__ = 'alainv@google.com (Alain Vongsouvanh)'
 import datetime
 
 from google.appengine.ext import db
-from google.appengine.API import users
+from google.appengine.api import users
 
 from oauth2client.appengine import CredentialsProperty
 
