@@ -33,6 +33,7 @@ from apiclient.http import BatchHttpRequest
 from oauth2client.appengine import StorageByKeyName
 
 from model import Credentials
+from model import FoodItem
 import util
 
 
@@ -105,13 +106,8 @@ class MainHandler(webapp2.RequestHandler):
     operation = self.request.get('operation')
     # Dict of operations to easily map keys to methods.
     operations = {
-        'insertSubscription': self._insert_subscription,
-        'deleteSubscription': self._delete_subscription,
         'insertItem': self._insert_item,
-        'insertItemWithAction': self._insert_item_with_action,
-        'insertItemAllUsers': self._insert_item_all_users,
-        'insertContact': self._insert_contact,
-        'deleteContact': self._delete_contact
+        'addFood': self._add_food
     }
     if operation in operations:
       message = operations[operation]()
@@ -121,23 +117,23 @@ class MainHandler(webapp2.RequestHandler):
     memcache.set(key=self.userid, value=message, time=5)
     self.redirect('/')
 
-  def _insert_subscription(self):
-    """Subscribe the app."""
-    # self.userid is initialized in util.auth_required.
-    body = {
-        'collection': self.request.get('collection', 'timeline'),
-        'userToken': self.userid,
-        'callbackUrl': util.get_full_url(self, '/notify')
-    }
-    # self.mirror_service is initialized in util.auth_required.
-    self.mirror_service.subscriptions().insert(body=body).execute()
-    return 'Application is now subscribed to updates.'
+  def _add_food(self):
+    name = self.request.get('foodName')
+    calories = calc_calories(name)
+    image = find_image(name)
+    f = FoodItem(name = name, calories = calories, imagelink = image)
+    f.put
+    self.present_food(f)
 
-  def _delete_subscription(self):
-    """Unsubscribe from notifications."""
-    collection = self.request.get('subscriptionId')
-    self.mirror_service.subscriptions().delete(id=collection).execute()
-    return 'Application has been unsubscribed.'
+  def present_food(self, f):
+    """Add a food to glass"""
+    body = {
+      'notification': {'level': 'DEFAULT'},
+      'text': "%s\ncalories: %s\nimage: %s"%(f.name, f.calories, f.imagelink)}
+    
+    # self.mirror_service is initialized in util.auth_required.
+    self.mirror_service.timeline().insert(body=body).execute()
+    return  'A food item has been sent to the timeline'
 
   def _insert_item(self):
     """Insert a timeline item."""
@@ -238,3 +234,16 @@ class MainHandler(webapp2.RequestHandler):
 MAIN_ROUTES = [
     ('/', MainHandler)
 ]
+def calc_calories(name):
+  calorieMap = {'chickenlegs': 500,
+                'cookies': 150,
+                'pancakes': 300,
+                'platter': 50,
+                'riceandveggies': 75,
+                'sandwhich': 200,
+                'spaghetti': 400,
+                'tacos': 450}
+  return calorieMap[name] or 1000
+
+def find_image(name):
+  return "/static/images/%s.png"%name
