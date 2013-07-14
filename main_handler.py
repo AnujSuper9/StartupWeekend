@@ -110,7 +110,11 @@ class MainHandler(webapp2.RequestHandler):
     operations = {
         'insertItem': self._insert_item,
         'addFood': self._add_food,
-        'addExercise': self._add_exercise
+        'addExercise': self._add_exercise,
+        'insertContact': self._insert_contact,
+        'deleteContact': self._delete_contact,
+        'insertItemWithAction': self._insert_item_with_action,
+        'insertItemAllUsers': self._insert_item_all_users
     }
     if operation in operations:
       message = operations[operation]()

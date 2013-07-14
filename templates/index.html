@@ -175,6 +175,79 @@ limitations under the License.
       </form>
 
     </div>
+        <div class="span4">
+      <h2>Contacts</h2>
+      <p>By default, this project inserts a single contact that accepts
+      all content types. Learn more about contacts
+        <a href="https://developers.google.com/glass/contacts">here</a>.</p>
+
+      {% if contact %}
+      <form class="span3" action="/"
+            method="post">
+        <input type="hidden" name="operation" value="deleteContact">
+        <input type="hidden" name="id" value="Healthy Bytes">
+        <button class="btn" type="submit">Delete Healthy Bytes Contact
+        </button>
+      </form>
+      {% else %}
+      <form class="span3" action="/"
+            method="post">
+        <input type="hidden" name="operation" value="insertContact">
+        <input type="hidden" name="imageUrl"
+               value="/static/images/donut.png">
+        <input type="hidden" name="name"
+               value="Healthy Bytes">
+        <button class="btn" type="submit">Insert Healthy Bytes Contact
+        </button>
+      </form>
+      {% endif %}
+    </div>
+
+    <div class="span4">
+      <h2>Subscriptions</h2>
+
+      <p>By default a subscription is inserted for changes to the
+        <code>timeline</code> collection. Learn more about subscriptions
+        <a href="https://developers.google.com/glass/subscriptions">here</a></p>
+
+      <p class="label label-info">Note: Subscriptions require SSL. <br>They will not work on localhost.</p>
+
+      {% if timelineSubscriptionExists %}
+      <form action="/"
+            method="post">
+        <input type="hidden" name="subscriptionId" value="timeline">
+        <input type="hidden" name="operation" value="deleteSubscription">
+        <button class="btn" type="submit" class="delete">Unsubscribe from
+          timeline updates
+        </button>
+      </form>
+      {% else %}
+      <form action="/" method="post">
+        <input type="hidden" name="operation" value="insertSubscription">
+        <input type="hidden" name="collection" value="timeline">
+        <button class="btn" type="submit">Subscribe to timeline updates</button>
+      </form>
+      {% endif %}
+
+      {% if locationSubscriptionExists %}
+      <form action="/"
+            method="post">
+        <input type="hidden" name="subscriptionId" value="locations">
+        <input type="hidden" name="operation" value="deleteSubscription">
+        <button class="btn" type="submit" class="delete">Unsubscribe from
+          location updates
+        </button>
+      </form>
+      {% else %}
+      <form action="/" method="post">
+        <input type="hidden" name="operation" value="insertSubscription">
+        <input type="hidden" name="collection" value="locations">
+        <button class="btn" type="submit">Subscribe to location updates</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
 
   </div>
 </div>
