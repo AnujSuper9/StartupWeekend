@@ -17,6 +17,7 @@
 __author__ = 'alainv@google.com (Alain Vongsouvanh)'
 
 
+import datetime
 import io
 import jinja2
 import logging
@@ -123,8 +124,9 @@ class MainHandler(webapp2.RequestHandler):
     name = self.request.get('foodName')
     calories = calc_foodcalories(name)
     image = find_image(name)
-    f = Food(name = name, calories = calories, imagelink = image)
-    f.put
+    now = datetime.datetime.now().date()
+    f = Food(name = name, calories = calories, imagelink = image, time = now)
+    f.put()
     self.present_food(f)
 
   def present_food(self, f):
@@ -157,7 +159,7 @@ class MainHandler(webapp2.RequestHandler):
     burnrate = calc_burnrate(name)
     duration = int(self.request.get('exerciseDuration'))
     e = Exercise(name = name, burnrate = burnrate, duration = duration)
-    e.put
+    e.put()
     self.present_exercise(e)
 
   def present_exercise(self, e):
@@ -165,7 +167,8 @@ class MainHandler(webapp2.RequestHandler):
     calories = int(calc_exercisecalories(e.burnrate, e.duration))
     name = get_foodname_from_calories(calories)
     image = find_image(name)
-    f = Food(name = name, calories = calories, imagelink = image)
+    now = datetime.datetime.now().date()
+    f = Food(name = name, calories = calories, imagelink = image, time = now)
     html = self.make_html(f)
     logging.info("HTML is %s"%html)
     text = 'Exercise: "%s" Duration: "%s" Food: "%s" Calories: "%s"'%(e.name, e.duration, f.name, f.calories)
