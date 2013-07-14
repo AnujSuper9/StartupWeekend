@@ -170,7 +170,7 @@ class MainHandler(webapp2.RequestHandler):
   def present_exercise(self, e, foods):
     """Display exercise result to glass"""
     for f in foods:
-      text = 'Exercise: "%s" Duration: "%s" Food: "%s" Calories Left: "%s out of %s"'%(e.name, e.duration, 
+      text = 'Calories Left: "%s out of %s"'%(e.name, e.duration, 
           f.name, f.calories_left, f.calories)
 
       media_link = find_bitten_image(f.name)
