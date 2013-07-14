@@ -314,12 +314,12 @@ MAIN_ROUTES = [
     ('/', MainHandler)
 ]
 def calc_foodcalories(name):
-  calorieMap = {'chickenlegs': 500,
-                'cookies': 140,
-                'pancakes': 300,
-                'platter': 50,
-                'riceandveggies': 75,
-                'sandwhich': 200,
+  calorieMap = {'chickenlegs': 264,
+                'cookies': 132,
+                'pancakes': 175,
+                'platter': 80,
+                'riceandveggies': 200,
+                'sandwich': 46,
                 'spaghetti': 400,
                 'tacos': 450,
                 'apple': 95
@@ -327,12 +327,11 @@ def calc_foodcalories(name):
   return calorieMap.get(name, 1000)
 
 def calc_burnrate(name):
-  burnrateMap = {'walking': 1.0,
-                  'running': 4.0,
-                  'bicycling': 2.0,
-                  'rowing': 3.0,
-                  'climbing': 5.0,
-                  'swimming': 6.0
+  burnrateMap = {'walking': 4.5,
+                  'running': 9.5,
+                  'bicycling': 6.0,
+                  'rowing': 9.5,
+                  'swimming': 8.0
                 }
   return burnrateMap.get(name, 1.0)
 
