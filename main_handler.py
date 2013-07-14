@@ -160,16 +160,12 @@ class MainHandler(webapp2.RequestHandler):
     duration = int(self.request.get('exerciseDuration'))
     e = Exercise(name = name, burnrate = burnrate, duration = duration)
     e.put()
-    self.present_exercise(e)
+    foods = self.find_foods_worked_off(e)
+    self.present_exercise(e, foods)
 
-  def present_exercise(self, e):
+  def present_exercise(self, e, foods):
     """Display exercise result to glass"""
-    calories = int(calc_exercisecalories(e.burnrate, e.duration))
-    name = get_foodname_from_calories(calories)
-    image = find_image(name)
-    now = datetime.datetime.now().date()
-    f = Food(name = name, calories = calories, imagelink = image, time = now)
-    html = self.make_html(f)
+    html = self.make_html(foods[0])
     logging.info("HTML is %s"%html)
     text = 'Exercise: "%s" Duration: "%s" Food: "%s" Calories: "%s"'%(e.name, e.duration, f.name, f.calories)
 
@@ -191,6 +187,13 @@ class MainHandler(webapp2.RequestHandler):
     # self.mirror_service is initialized in util.auth_required.
     self.mirror_service.timeline().insert(body=body, media_body=media).execute()
     return  'An exercise item has been sent to the timeline'
+
+  def find_foods_worked_off(self, e):
+    calories = int(calc_exercisecalories(e.burnrate, e.duration))
+    name = get_foodname_from_calories(calories)
+    image = find_image(name)
+    now = datetime.datetime.now().date()
+    return [Food(name = name, calories = calories, imagelink = image, time = now)]
 
   def make_html(self, f):
     #return '<div><p>Food: %s</p><p>Calories %s</p><p><img src="%s"/>'%(f.name, f.calories, f.imagelink)
