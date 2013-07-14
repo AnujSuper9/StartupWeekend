@@ -126,7 +126,7 @@ class MainHandler(webapp2.RequestHandler):
     image = find_image(name)
     now = datetime.datetime.now().date()
     f = Food(name = name, calories = calories, imagelink = image, time = now)
-    f.put
+    f.put()
     self.present_food(f)
 
   def present_food(self, f):
