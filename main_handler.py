@@ -146,7 +146,7 @@ class MainHandler(webapp2.RequestHandler):
     burnrate = calc_burnrate(name)
     duration = int(self.request.get('exerciseDuration'))
     e = Exercise(name = name, burnrate = burnrate, duration = duration)
-    e.put
+    e.put()
     self.present_exercise(e)
 
   def present_exercise(self, e):
