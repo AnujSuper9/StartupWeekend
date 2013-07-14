@@ -76,9 +76,9 @@ class MainHandler(webapp2.RequestHandler):
     # self.mirror_service is initialized in util.auth_required.
     try:
       template_values['contact'] = self.mirror_service.contacts().get(
-        id='Python Quick Start').execute()
+        id='Healthy Bytes').execute()
     except errors.HttpError:
-      logging.info('Unable to find Python Quick Start contact.')
+      logging.info('Unable to find Healthy Bytes contact.')
 
     timeline_items = self.mirror_service.timeline().list(maxResults=3).execute()
     template_values['timelineItems'] = timeline_items.get('items', [])
@@ -226,8 +226,8 @@ class MainHandler(webapp2.RequestHandler):
     logging.info('Inserting timeline item')
     body = {
         'creator': {
-            'displayName': 'Python Starter Project',
-            'id': 'PYTHON_STARTER_PROJECT'
+            'displayName': 'Healthy Bytes',
+            'id': 'Healthy_Bytes'
         },
         'text': 'Tell me what you had for lunch :)',
         'notification': {'level': 'DEFAULT'},

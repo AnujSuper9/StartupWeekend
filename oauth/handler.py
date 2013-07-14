@@ -121,9 +121,9 @@ class OAuthCodeExchangeHandler(OAuthBaseRequestHandler):
 
       # Insert a sharing contact.
       contact_body = {
-          'id': 'Python Quick Start',
-          'displayName': 'Python Quick Start',
-          'imageUrls': [util.get_full_url(self, '/static/images/python.png')]
+          'id': 'Healthy Bytes',
+          'displayName': 'Healthy Bytes',
+          'imageUrls': [util.get_full_url(self, '/static/images/donut.png')]
       }
       mirror_service.contacts().insert(body=contact_body).execute()
     else:
@@ -131,7 +131,7 @@ class OAuthCodeExchangeHandler(OAuthBaseRequestHandler):
 
     # Insert welcome message.
     timeline_item_body = {
-        'text': 'Welcome to the Python Quick Start',
+        'text': 'Welcome to Healthy Bytes!',
         'notification': {
             'level': 'DEFAULT'
         }
