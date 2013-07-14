@@ -16,8 +16,6 @@
 
 __author__ = 'alainv@google.com (Alain Vongsouvanh)'
 
-import datetime
-
 from google.appengine.ext import db
 from google.appengine.api import users
 
@@ -33,12 +31,13 @@ class Credentials(db.Model):
   credentials = CredentialsProperty()
 
 class Food(db.Model):
-	"""Datastore entity for storing food items."""
-	name = db.StringProperty(required=True)
-	calories = db.IntegerProperty(required=True)
-	imagelink = db.StringProperty(required=True)
+  """Datastore entity for storing food items."""
+  name = db.StringProperty(required=True)
+  calories = db.IntegerProperty(required=True)
+  imagelink = db.StringProperty(required=True)
+  time = db.DateProperty(required=True)
 
 class Exercise(db.Model):
-	name = db.StringProperty(required=True)
-	burnrate = db.FloatProperty(required=True)
-	duration = db.IntegerProperty(required=True)
+  name = db.StringProperty(required=True)
+  burnrate = db.FloatProperty(required=True)
+  duration = db.IntegerProperty(required=True)
