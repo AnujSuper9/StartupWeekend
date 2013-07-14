@@ -169,7 +169,7 @@ class MainHandler(webapp2.RequestHandler):
       text = 'Exercise: "%s" Duration: "%s" Food: "%s" Calories Left: "%s out of %s"'%(e.name, e.duration, 
           f.name, f.calories_left, f.calories)
 
-      media_link = f.imagelink
+      media_link = find_bitten_image(f.name)
       if media_link:
         if media_link.startswith('/'):
           media_link = util.get_full_url(self, media_link)
@@ -332,43 +332,12 @@ def calc_burnrate(name):
                 }
   return burnrateMap.get(name, 1.0)
 
-def get_foodname_from_calories (calories):
-  foodname = 'platter'
-  if (calories >= 500):
-    foodname = 'chickenlegs'
-  elif (calories >= 450 and calories < 500):
-    foodname = 'tacos'
-  elif (calories >= 400 and calories < 450):
-    foodname = 'spaghetti'
-  elif (calories >= 350 and calories < 400):
-    foodname = 'pancakes'
-  elif (calories >= 300 and calories < 350):
-    foodname = 'pancakes'
-  elif (calories >= 250 and calories < 300):
-    foodname = 'sandwich'
-  elif (calories >= 200 and calories < 250):
-    foodname = 'sandwich'
-  elif (calories >= 150 and calories < 200):
-    foodname = 'cookies'
-  elif (calories >= 100 and calories < 150):
-    foodname = 'cookies'
-  elif (calories >= 95 and calories < 100):
-    foodname = 'cookies'
-  elif (calories >= 75 and calories < 95):
-    foodname = 'riceandveggies'
-  elif (calories >= 50 and calories < 75):
-    foodname = 'platter'
-  elif (calories >= 25 and calories < 50):
-    foodname = 'platter'
-  elif (calories >= 0 and calories < 25):
-    foodname = 'platter'
-  else:
-    foodname = 'platter'
-  return foodname
-
 def calc_exercisecalories(burnrate, duration):
   calories = burnrate * duration
   return calories
 
 def find_image(name):
   return "/static/images/%s.png"%name
+
+def find_bitten_image(name):
+  return "/static/images/%s-bite.png"%name
