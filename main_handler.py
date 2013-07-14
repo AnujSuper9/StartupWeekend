@@ -303,7 +303,8 @@ def calc_foodcalories(name):
                 'riceandveggies': 75,
                 'sandwhich': 200,
                 'spaghetti': 400,
-                'tacos': 450
+                'tacos': 450,
+                'apple': 95
                 }
   return calorieMap.get(name, 1000)
 
@@ -337,7 +338,9 @@ def get_foodname_from_calories (calories):
     foodname = 'cookies'
   elif (calories >= 100 and calories < 150):
     foodname = 'cookies'
-  elif (calories >= 75 and calories < 100):
+  elif (calories >= 95 and calories < 100):
+    foodname = 'cookies'
+  elif (calories >= 75 and calories < 95):
     foodname = 'riceandveggies'
   elif (calories >= 50 and calories < 75):
     foodname = 'platter'
