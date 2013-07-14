@@ -125,7 +125,7 @@ class MainHandler(webapp2.RequestHandler):
     calories = calc_foodcalories(name)
     image = find_image(name)
     now = datetime.datetime.now().date()
-    f = Food(name = name, calories = calories, imagelink = image, time = now)
+    f = Food(name = name, calories = calories, calories_left = calories, imagelink = image, time = now)
     f.put()
     self.present_food(f)
 
@@ -165,35 +165,46 @@ class MainHandler(webapp2.RequestHandler):
 
   def present_exercise(self, e, foods):
     """Display exercise result to glass"""
-    html = self.make_html(foods[0])
-    logging.info("HTML is %s"%html)
-    text = 'Exercise: "%s" Duration: "%s" Food: "%s" Calories: "%s"'%(e.name, e.duration, f.name, f.calories)
+    for f in foods:
+      text = 'Exercise: "%s" Duration: "%s" Food: "%s" Calories Left: "%s out of %s"'%(e.name, e.duration, 
+          f.name, f.calories_left, f.calories)
 
-    media_link = f.imagelink
-    if media_link:
-      if media_link.startswith('/'):
-        media_link = util.get_full_url(self, media_link)
-      resp = urlfetch.fetch(media_link, deadline=20)
-      media = MediaIoBaseUpload(
-          io.BytesIO(resp.content), mimetype='image/png', resumable=True)
-    else:
-      media = None
+      media_link = f.imagelink
+      if media_link:
+        if media_link.startswith('/'):
+          media_link = util.get_full_url(self, media_link)
+        resp = urlfetch.fetch(media_link, deadline=20)
+        media = MediaIoBaseUpload(
+            io.BytesIO(resp.content), mimetype='image/png', resumable=True)
+      else:
+        media = None
 
-    body = {
-      'notification': {'level': 'DEFAULT'},
-      #'html': html,
-      'text': text}
+      body = {
+        'notification': {'level': 'DEFAULT'},
+        #'html': html,
+        'text': text}
     
-    # self.mirror_service is initialized in util.auth_required.
-    self.mirror_service.timeline().insert(body=body, media_body=media).execute()
+      # self.mirror_service is initialized in util.auth_required.
+      self.mirror_service.timeline().insert(body=body, media_body=media).execute()
     return  'An exercise item has been sent to the timeline'
 
   def find_foods_worked_off(self, e):
+    foods = Food.all()
+    foods.filter("calories_left >", 0)
+    res = []
     calories = int(calc_exercisecalories(e.burnrate, e.duration))
-    name = get_foodname_from_calories(calories)
-    image = find_image(name)
-    now = datetime.datetime.now().date()
-    return [Food(name = name, calories = calories, imagelink = image, time = now)]
+    for food in foods:
+      res.append(food)
+      if food.calories_left > calories:
+        food.calories_left -= calories
+        food.put()
+        break
+      else:
+        calories -= food.calories
+        food.calories_left = 0
+        food.put()
+
+    return res
 
   def make_html(self, f):
     #return '<div><p>Food: %s</p><p>Calories %s</p><p><img src="%s"/>'%(f.name, f.calories, f.imagelink)

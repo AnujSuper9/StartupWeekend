@@ -34,6 +34,7 @@ class Food(db.Model):
   """Datastore entity for storing food items."""
   name = db.StringProperty(required=True)
   calories = db.IntegerProperty(required=True)
+  calories_left = db.IntegerProperty(required=True)
   imagelink = db.StringProperty(required=True)
   time = db.DateProperty(required=True)
 
