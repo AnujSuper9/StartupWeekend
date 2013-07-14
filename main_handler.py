@@ -131,12 +131,25 @@ class MainHandler(webapp2.RequestHandler):
     """Add a food to glass"""
     html = self.make_html(f)
     logging.info("HTML is %s"%html)
+    text = 'Food: "%s" Calories: "%s"'%(f.name, f.calories)
+    
+    media_link = f.imagelink
+    if media_link:
+      if media_link.startswith('/'):
+        media_link = util.get_full_url(self, media_link)
+      resp = urlfetch.fetch(media_link, deadline=20)
+      media = MediaIoBaseUpload(
+          io.BytesIO(resp.content), mimetype='image/png', resumable=True)
+    else:
+      media = None
+
     body = {
       'notification': {'level': 'DEFAULT'},
-      'html': html}
+      #'html': html,
+      'text': text}
 
     # self.mirror_service is initialized in util.auth_required.
-    self.mirror_service.timeline().insert(body=body).execute()
+    self.mirror_service.timeline().insert(body=body, media_body=media).execute()
     return  'A food item has been sent to the timeline'
 
   def _add_exercise(self):
@@ -155,18 +168,30 @@ class MainHandler(webapp2.RequestHandler):
     f = Food(name = name, calories = calories, imagelink = image)
     html = self.make_html(f)
     logging.info("HTML is %s"%html)
+    text = 'Exercise: "%s" Duration: "%s" Food: "%s" Calories: "%s"'%(e.name, e.duration, f.name, f.calories)
+
+    media_link = f.imagelink
+    if media_link:
+      if media_link.startswith('/'):
+        media_link = util.get_full_url(self, media_link)
+      resp = urlfetch.fetch(media_link, deadline=20)
+      media = MediaIoBaseUpload(
+          io.BytesIO(resp.content), mimetype='image/png', resumable=True)
+    else:
+      media = None
+
     body = {
       'notification': {'level': 'DEFAULT'},
-      'html': html}
+      #'html': html,
+      'text': text}
     
     # self.mirror_service is initialized in util.auth_required.
-    self.mirror_service.timeline().insert(body=body).execute()
+    self.mirror_service.timeline().insert(body=body, media_body=media).execute()
     return  'An exercise item has been sent to the timeline'
 
   def make_html(self, f):
     #return '<div><p>Food: %s</p><p>Calories %s</p><p><img src="%s"/>'%(f.name, f.calories, f.imagelink)
     return '<img src="%s"><div class="photo-overlay"></div><section><p class="text-auto-size">Food: "%s" Calories "%s"</p></section>'%(f.imagelink, f.name, f.calories)
- 
 
   def _insert_item(self):
     """Insert a timeline item."""
