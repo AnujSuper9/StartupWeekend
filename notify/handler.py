@@ -81,7 +81,7 @@ class NotifyHandler(webapp2.RequestHandler):
           else:
             logging.info('Unable to retrieve attachment: %s', resp.status)
         body = {
-            'text': 'Apple: 100 Calories %s' % item.get('text', ''),
+            'text': 'Pickle: 100 Calories %s' % item.get('text', ''),
             'notification': {'level': 'DEFAULT'}
         }
         self.mirror_service.timeline().insert(
