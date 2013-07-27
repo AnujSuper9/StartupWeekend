@@ -74,6 +74,9 @@ limitations under the License.
             <strong>HTML: </strong> {{ timelineItem.html }}
           </li>
           <li>
+            <strong>LocationAddress: </strong> {{ timelineItem.location.address }}
+          </li>
+          <li>
             <strong>Attachments: </strong>
             {% for attachment in timelineItem.attachments %}
             {% if attachment.contentType.startswith('image') %}
