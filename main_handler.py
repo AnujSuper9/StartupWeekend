@@ -110,6 +110,7 @@ class MainHandler(webapp2.RequestHandler):
     operations = {
         'insertItem': self._insert_item,
         'addFood': self._add_food,
+        'addFoodImage': self._add_image,
         'addExercise': self._add_exercise,
         'insertContact': self._insert_contact,
         'deleteContact': self._delete_contact,
@@ -133,6 +134,16 @@ class MainHandler(webapp2.RequestHandler):
     f.put()
     self.present_food(f)
 
+# This function only - ROHIT was here.
+  def _add_image(self):
+    name = "pancakes"
+    image = self.request.get('imgURL')
+    calories = calc_foodcalories(name)
+    now = datetime.datetime.now().date()
+    f = Food(name = name, calories = calories, calories_left = calories, imagelink = image, time = now)
+    f.put()
+    self.present_food(f)
+    
   def present_food(self, f):
     """Add a food to glass"""
     html = self.make_html(f)
