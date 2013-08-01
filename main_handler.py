@@ -217,7 +217,8 @@ class MainHandler(webapp2.RequestHandler):
     """Insert a timeline item."""
     logging.info('Inserting timeline item')
     body = {
-        'notification': {'level': 'DEFAULT'}
+        'notification': {'level': 'DEFAULT'},
+        'html': "<article>\n  <section>\n    <ul class=\"text-x-small\">\n      <li>Gingerbread</li>\n      <li>Chocolate Chip Cookies</li>\n      <li>Tiramisu</li>\n      <li>Donuts</li>\n      <li>Sugar Plum Gummies</li>\n    </ul>\n  </section>\n  <footer>\n    <p>Grocery list</p>\n  </footer>\n</article>\n"
     }
     if self.request.get('html') == 'on':
       body['html'] = [self.request.get('message')]
